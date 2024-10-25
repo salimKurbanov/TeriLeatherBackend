@@ -23,6 +23,7 @@ const createtables = async () => {
         await pool.query(`CREATE TABLE IF NOT EXISTS products (
             productid SERIAL PRIMARY KEY, 
             title TEXT NOT NULL,
+            description TEXT NOT NULL,
             gender INT NOT NULL, -- 1, 2 or 3
             categories TEXT,
             article TEXT UNIQUE
@@ -30,7 +31,6 @@ const createtables = async () => {
 
         await pool.query(`CREATE TABLE IF NOT EXISTS shades (
             shadeid SERIAL PRIMARY KEY,
-            description TEXT NOT NULL,
             price INT NOT NULL, 
             discount SMALLINT,
             color TEXT NOT NULL,
@@ -39,11 +39,10 @@ const createtables = async () => {
             main_image TEXT,
             images TEXT[],
             material TEXT NOT NULL,
-            work TEXT NOT NULL,
             available BOOLEAN DEFAULT false,
             new BOOLEAN DEFAULT false,
             tags TEXT[],
-            datetime TIMESTAMP DEFAULT CURRENT_DATE,
+            datetime TIMESTAMP DEFAULT LOCALTIMESTAMP,
             article TEXT
         )`)
 

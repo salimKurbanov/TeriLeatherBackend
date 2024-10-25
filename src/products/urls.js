@@ -3,7 +3,7 @@ import Views from "./views";
 
 
 const products = new Elysia({prefix: '/api/products'})
-    .get('/all', () => Views.getAllProducts())
+    .get('/all/', ({query}) => Views.getAllProducts(query))
     .get('/detail/:slug', ({params: {slug}}) => Views.getProductDetail(slug))
     .delete('/delete/product/:id', ({params: {id}}) => Views.deleteProduct(id))
     .delete('/delete/shade/:id', ({params: {id}}) => Views.deleteShade(id))
@@ -13,20 +13,19 @@ const products = new Elysia({prefix: '/api/products'})
                 title: t.String(),
                 gender: t.Integer(), //1,2 or 3
                 categories: t.String(),
-                //Поля для оттенка
                 description: t.String(),
+                //Поля для оттенка
                 price: t.Integer(), 
                 discount: t.Integer(),
                 color: t.String(),
                 color_name: t.String(),
                 slug: t.String(),
                 main_image: t.Files(),
-                images: t.Array(),
+                images: t.Array(t.File()),
                 material: t.String(),
-                work: t.String(),
                 available: t.Boolean(),
                 new: t.Boolean(),
-                tags: t.Array(),
+                tags: t.Array(t.String()),
                 datetime: t.Date(),
             }
         }
