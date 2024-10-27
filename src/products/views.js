@@ -10,14 +10,32 @@ Views.getAllProducts = async (query) => {
 
         let order = query.order || 'datetime'
         let sort = query.sort || 'DESC'
+        let filters = ''
+
+        if(query.colors) {
+            filters += `AND shades.color_name IN ${query.colors}`
+        }
+
+        if(query.material) {
+            filters += `AND shades.material IN ${query.material}`
+        }
+
+        if(query.priceMin && query.priceMax) {
+            filters += `AND shades.price BETWEEN ${query.priceMin} AND ${query.priceMax}`
+        }
+
+        if(filters[0] === 'A') {
+            filters = filters.slice(3)
+        }
 
         let res = await pool.query(`
             SELECT * 
             FROM products 
             LEFT OUTER JOIN shades 
-            ON products.article = shades.article 
+            ON products.article = shades.article
+            ${filters ? `WHERE ${filters}` : ''}
             ORDER BY shades.${order} ${sort}
-        `)
+        `, )
 
         return {success: true, status: 200, data: res.rows}
 
