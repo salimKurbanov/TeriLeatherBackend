@@ -157,6 +157,8 @@ Views.deleteShade = async (id) => {
 
         await pool.query('DELETE FROM shades WHERE shadeid = $1', [id])
 
+        return {success: true, status: 200}
+
     } catch(e) {
         return {success: false, status: 500, message: 'Не удалось выполнить запрос, попробуйте ещё раз', error: e.message}
     }

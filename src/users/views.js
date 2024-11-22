@@ -18,7 +18,7 @@ Views.createUser = async (body) => {
     try {
         let password = new Bun.CryptoHasher("sha256").update(body.password).digest("hex");
         
-        let res = await pool.query(`INSERT INTO users (email, name, surname, middlename, password, phone, role) VALUES (\$1, \$2, \$3, \$4, \$5, \$6, \$7) RETURNING *`, [body.email, body.name, body.surname, body.middlename, password, body.phone, body.role])
+        let res = await pool.query(`INSERT INTO users (email, name, surname, middlename, password, phone) VALUES (\$1, \$2, \$3, \$4, \$5, \$6) RETURNING *`, [body.email, body.name, body.surname, body.middlename, password, body.phone])
 
         // Отправить смс на почту с ссылкой
 
@@ -61,6 +61,18 @@ Views.signIn = async (req, user) => {
 
     } catch(e) {
         return {success: false, error: e.message, status: 401}
+    }
+}
+
+Views.deleteUser = async (id) => {
+    try {
+
+        await pool.query(`DELETE FROM users WHERE userid = \$1`, [id])
+
+        return {success: true, status: 200}
+
+    } catch(e) {
+        return {success: false, error: e.message, status: 400}
     }
 }
 
