@@ -55,6 +55,19 @@ const createtables = async () => {
             date TIMESTAMP NOT NULL,
             slug TEXT UNIQUE NOT NULL
         )`)
+
+        await pool.query(`CREATE TABLE IF NOT EXISTS users (
+            userid SERIAL PRIMARY KEY,
+            email TEXT NOT NULL,
+            name TEXT NOT NULL,
+            surname TEXT NOT NULL,
+            middlename TEXT NOT NULL,
+            password TEXT NOT NULL,
+            phone TEXT NOT NULL,
+            role TEXT NOT NULL,
+            active BOOLEAN DEFAULT false,
+            datetime TIMESTAMP DEFAULT CURRENT_DATE 
+        )`)
         
         console.log('database init')
     }
