@@ -38,6 +38,7 @@ Views.userActivation = async () => {
 }
 
 Views.signIn = async (req, user) => {
+    console.log('hi')
     try {
 
         let res = await pool.query(`SELECT * FROM users WHERE email = \$1`, [user.email])
