@@ -63,9 +63,10 @@ const createtables = async () => {
             middlename TEXT NOT NULL,
             password TEXT NOT NULL,
             phone TEXT NOT NULL,
-            role TEXT NOT NULL,
+            role TEXT DEFAULT 'client',
             active BOOLEAN DEFAULT false,
-            datetime TIMESTAMP DEFAULT CURRENT_DATE 
+            datetime TIMESTAMP DEFAULT CURRENT_DATE,
+            banned BOOLEAN DEFAULT false
         )`)
         
         console.log('database init')
