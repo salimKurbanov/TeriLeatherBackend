@@ -6,7 +6,7 @@ const users = new Elysia({prefix: '/api/users'})
     .get('/all', () => Views.getAllUsers())
     .get('/activate', () => Views.userActivation())
     .delete('/delete/:id', ({params: {id}}) => Views.deleteUser(id))
-    .post('/signin', ({headers, body}) => Views.signIn(headers, body), {
+    .post('/signin', ({body, ip}) => Views.signIn(body, ip), {
         schema: {
             body: {
                 email: t.String(),

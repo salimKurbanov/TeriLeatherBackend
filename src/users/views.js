@@ -3,7 +3,26 @@ import jwt from "../jwt";
 import upload from "../upload";
 import utils from "../utils";
 
+
 const Views = {}
+
+
+Views.init = async (headers) => {
+    try {
+
+        let user = utils.AES.decrypt(headers.ssid, utils.token).toString()
+        user = JSON.parse(user)
+
+        console.log(user)
+
+        let res = await pool.query(`SELECT FROM users WHERE userid = \$1`, [user.user_id])
+
+        res = res.rows[0]
+
+    } catch(e) {
+        return {success: false, message: e.message, status: 500}
+    }
+}
 
 Views.getAllUsers = async () => {
     try {
@@ -37,31 +56,31 @@ Views.userActivation = async () => {
     }
 }
 
-Views.signIn = async (req, user) => {
-    console.log('hi')
+Views.signIn = async (user, ip) => {
     try {
 
         let res = await pool.query(`SELECT * FROM users WHERE email = \$1`, [user.email])
         res = res.rows[0]
 
         if(!res) {
-            return {success: false, status: 401, message: 'Неверный логин или пароль'}
+            return {success: false, status: 400, message: 'Неверный логин или пароль'}
         }
 
-        if(!res.user.active) {
-            return {success: false, status: 401, message: 'Ваш аккаунт не активирован'}
+        if(!res.active) {
+            return {success: false, status: 400, message: 'Ваш аккаунт не активирован'}
+        }
+        
+        let password = new Bun.CryptoHasher("sha256").update(user.password).digest("hex")
+        if(res.password !== password) {
+            return {success: false, status: 400, message: 'Неверный логин или пароль'}
         }
 
-        if(res.password !== user.password) {
-            return {success: false, status: 401, message: 'Неверный логин или пароль'}
-        }
-
-        const accessToken = jwt.create(req, user)
+        const accessToken = jwt.create(user, ip)
 
         return {success: true, accessToken: accessToken, status: 200}
 
     } catch(e) {
-        return {success: false, error: e.message, status: 401}
+        return {success: false, message: e.message, status: 500}
     }
 }
 
