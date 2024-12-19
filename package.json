@@ -9,6 +9,7 @@
     "@elysiajs/cors": "^1.1.1",
     "crypto-js": "^4.2.0",
     "elysia": "^1.1.17",
+    "elysia-ip": "^1.0.7",
     "pg": "^8.13.0"
   },
   "devDependencies": {
